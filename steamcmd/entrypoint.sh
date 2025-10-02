@@ -33,6 +33,13 @@ export TZ
 INTERNAL_IP=$(ip route get 1 | awk '{print $(NF-2);exit}')
 export INTERNAL_IP
 
+# Set up Steam Runtime environment for Counter-Strike 2
+if [ -d "/usr/local/steamrt-sniper" ]; then
+    export STEAM_RUNTIME="/usr/local/steamrt-sniper"
+    export LD_LIBRARY_PATH="/usr/local/steamrt-sniper/usr/lib/x86_64-linux-gnu:/usr/local/steamrt-sniper/usr/lib/i386-linux-gnu:$LD_LIBRARY_PATH"
+    export PATH="/usr/local/steamrt-sniper/usr/bin:$PATH"
+fi
+
 # Set environment for Steam Proton
 if [ -f "/usr/local/bin/proton" ]; then
     if [ ! -z ${SRCDS_APPID} ]; then

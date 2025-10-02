@@ -56,6 +56,17 @@ RUN			apt -y install \
 
 RUN 		useradd -d /home/container -m container
 
+## Install Steam Runtime libraries for Counter-Strike 2
+RUN			cd /tmp \
+			&& curl -sSL https://repo.steampowered.com/steamrt-images-sniper/snapshots/latest/steamrt-sniper-runtime.tar.xz -o steamrt-sniper-runtime.tar.xz \
+			&& tar -xf steamrt-sniper-runtime.tar.xz -C /usr/local/ \
+			&& rm steamrt-sniper-runtime.tar.xz
+
+## Create symlinks for V8 library
+RUN			mkdir -p /usr/local/steamrt-sniper/usr/lib/x86_64-linux-gnu \
+			&& ln -sf /usr/lib/x86_64-linux-gnu/libv8.so /usr/local/steamrt-sniper/usr/lib/x86_64-linux-gnu/libv8.so \
+			|| echo "V8 library not found, will be handled by Steam Runtime"
+
 ## Specific to pavlov_vr
 RUN			rm /usr/lib/x86_64-linux-gnu/libc++.so  \
 			&& ln -s /usr/lib/x86_64-linux-gnu/libc++.so.1 /usr/lib/x86_64-linux-gnu/libc++.so
