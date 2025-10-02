@@ -38,13 +38,24 @@ RUN         dpkg --add-architecture i386 \
                 tzdata \
                 xvfb \
                 tini \
-                libc6
+                libc6 \
+                libv8-11-dev \
+                libv8-11 \
+                libv8-dev \
+                nodejs-dev \
+                node-gyp \
+                libnode-dev
 
 # Install rcon
 RUN         cd /tmp/ \
             && curl -sSL https://github.com/gorcon/rcon-cli/releases/download/v0.10.3/rcon-0.10.3-amd64_linux.tar.gz > rcon.tar.gz \
             && tar xvf rcon.tar.gz \
             && mv rcon-0.10.3-amd64_linux/rcon /usr/local/bin/
+
+# Create symlinks for V8 library
+RUN         mkdir -p /usr/lib/x86_64-linux-gnu \
+            && ln -sf /usr/lib/x86_64-linux-gnu/libv8.so.11 /usr/lib/x86_64-linux-gnu/libv8.so \
+            || echo "V8 library not found, will be handled by system"
             
 # Setup user and working directory
 RUN         useradd -m -d /home/container -s /bin/bash container
